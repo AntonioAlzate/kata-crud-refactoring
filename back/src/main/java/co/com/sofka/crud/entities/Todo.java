@@ -1,8 +1,8 @@
 package co.com.sofka.crud.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.*;
 
 @Entity
 public class Todo {
@@ -11,15 +11,11 @@ public class Todo {
     private Long id;
     private String name;
     private boolean completed;
-    private String groupListId;
 
-    public String getGroupListId() {
-        return groupListId;
-    }
-
-    public void setGroupListId(String groupListId) {
-        this.groupListId = groupListId;
-    }
+    @ManyToOne
+    @JoinColumn(name = "idGroupTodos")
+    @JsonIgnoreProperties("idGroupTodos")
+    private GroupTodos groupTodos;
 
     public Long getId() {
         return id;
@@ -43,5 +39,13 @@ public class Todo {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public GroupTodos getGroupTodos() {
+        return groupTodos;
+    }
+
+    public void setGroupTodos(GroupTodos groupTodos) {
+        this.groupTodos = groupTodos;
     }
 }
