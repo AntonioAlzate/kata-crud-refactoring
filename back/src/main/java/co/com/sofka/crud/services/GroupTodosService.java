@@ -41,12 +41,16 @@ public class GroupTodosService {
         return groupsFactory.toGroupDTO(group);
     }
 
-    public GroupTodos createNewGroupTodo(GroupTodos groupTodo) {
-        if(groupTodo.getName().trim().isEmpty()){
+    public GroupTodosDTO createNewGroupTodo(GroupTodosDTO groupDTO) {
+
+        if(groupDTO.getName().trim().isEmpty()){
             throw new EmptyFieldException("El campo nombre no puede estar vacío");
         }
 
-        return groupTodosRepository.save(groupTodo);
+        GroupTodos groupEntity = groupsFactory.toGroupTodos(groupDTO);
+        groupDTO = groupsFactory.toGroupDTO(groupTodosRepository.save(groupEntity));
+
+        return groupDTO;
     }
 
     public void deleteGroupById(Long id) {

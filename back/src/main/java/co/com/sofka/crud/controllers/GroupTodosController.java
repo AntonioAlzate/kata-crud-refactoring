@@ -29,8 +29,8 @@ public class GroupTodosController {
     }
 
     @PostMapping(value = "api/grouptodos")
-    public GroupTodos createNewGroupTodo(@RequestBody GroupTodos groupTodo){
-        return groupTodosService.createNewGroupTodo(groupTodo);
+    public GroupTodosDTO createNewGroupTodo(@RequestBody GroupTodosDTO groupDTO){
+        return groupTodosService.createNewGroupTodo(groupDTO);
     }
 
     @DeleteMapping(value = "api/grouptodos/{groupId}")

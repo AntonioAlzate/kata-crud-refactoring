@@ -4,6 +4,7 @@ import co.com.sofka.crud.dtos.GroupTodosDTO;
 import co.com.sofka.crud.entities.GroupTodos;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,9 @@ public class GroupTodosFactory {
         GroupTodosDTO groupDTO = new GroupTodosDTO();
         groupDTO.setIdGroupTodos(group.getIdGroupTodos());
         groupDTO.setName(group.getName());
-        groupDTO.setTodos(todosFactory.toTodoList(group.getTodos()));
+
+        if(groupDTO.getTodos() != null)
+            groupDTO.setTodos(todosFactory.toTodoList(group.getTodos()));
 
         return groupDTO;
     }
@@ -36,6 +39,7 @@ public class GroupTodosFactory {
 
         groupTodos.setIdGroupTodos(groupTodosDTO.getIdGroupTodos());
         groupTodos.setName(groupTodosDTO.getName());
+        groupTodos.setTodos(new ArrayList<>());
 
         return groupTodos;
     }
