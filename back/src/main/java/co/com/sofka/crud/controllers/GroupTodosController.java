@@ -2,6 +2,7 @@ package co.com.sofka.crud.controllers;
 
 import co.com.sofka.crud.businessexceptions.NotFoundTodoIdException;
 import co.com.sofka.crud.dtos.GroupTodosDTO;
+import co.com.sofka.crud.dtos.TodoDTO;
 import co.com.sofka.crud.entities.GroupTodos;
 import co.com.sofka.crud.entities.Todo;
 import co.com.sofka.crud.services.GroupTodosService;
@@ -40,14 +41,14 @@ public class GroupTodosController {
 
     // Operaciones sobre un To do en particular
     @PostMapping(value = "api/todo/{groupId}")
-    public Todo createNewTodoByGroupId(@PathVariable("groupId") Long groupId, @RequestBody Todo todo){
-        return groupTodosService.createNewTodoByGroupId(groupId, todo);
+    public TodoDTO createNewTodoByGroupId(@PathVariable("groupId") Long groupId, @RequestBody TodoDTO todoDTO){
+        return groupTodosService.createNewTodoByGroupId(groupId, todoDTO);
     }
 
     @PutMapping(value = "api/todo/{groupId}")
-    public Todo updateTodoByGroupId(@PathVariable("groupId") Long groupId, @RequestBody Todo todo){
-        if(todo.getId() != null){
-            return groupTodosService.updateTodoByGroupId(groupId, todo);
+    public TodoDTO updateTodoByGroupId(@PathVariable("groupId") Long groupId, @RequestBody TodoDTO todoDTO){
+        if(todoDTO.getId() != null){
+            return groupTodosService.updateTodoByGroupId(groupId, todoDTO);
         }
         throw new NotFoundTodoIdException("El ToDo a actualizar debe contener un id");
     }

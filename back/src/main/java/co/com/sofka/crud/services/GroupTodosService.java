@@ -4,9 +4,11 @@ import co.com.sofka.crud.businessexceptions.EmptyFieldException;
 import co.com.sofka.crud.businessexceptions.NotFoundGroupIdException;
 import co.com.sofka.crud.businessexceptions.NotFoundTodoIdException;
 import co.com.sofka.crud.dtos.GroupTodosDTO;
+import co.com.sofka.crud.dtos.TodoDTO;
 import co.com.sofka.crud.entities.GroupTodos;
 import co.com.sofka.crud.entities.Todo;
 import co.com.sofka.crud.factory.GroupTodosFactory;
+import co.com.sofka.crud.factory.TodosFactory;
 import co.com.sofka.crud.repository.GroupTodosRepository;
 import co.com.sofka.crud.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class GroupTodosService {
 
     @Autowired
     private GroupTodosFactory groupsFactory;
+
+    @Autowired
+    private TodosFactory todosFactory;
 
     public List<GroupTodosDTO> listGroupsTodos(){
         List<GroupTodos> groups = (List<GroupTodos>) groupTodosRepository.findAll();
@@ -60,35 +65,45 @@ public class GroupTodosService {
         groupTodosRepository.delete(groupTodos);
     }
 
-    public Todo createNewTodoByGroupId(Long groupId, Todo todo) {
-        GroupTodos group = groupTodosRepository.findById(groupId)
-                .orElseThrow(() -> new NotFoundGroupIdException(NOT_FOUND_GROUP_ID));
-
-        if(todo.getName().trim().isEmpty()){
+    public TodoDTO createNewTodoByGroupId(Long groupId, TodoDTO todoDTO) {
+        if(todoDTO.getName().trim().isEmpty()){
             throw new EmptyFieldException("Campo nombre no puede estár vacío");
         }
 
-        todo.setGroupTodos(group);
-        Todo todoDb = todoRepository.save(todo);
-
-        return todoDb;
-    }
-
-    public Todo updateTodoByGroupId(Long groupId, Todo todo) {
         GroupTodos group = groupTodosRepository.findById(groupId)
                 .orElseThrow(() -> new NotFoundGroupIdException(NOT_FOUND_GROUP_ID));
 
+        Todo todoEntity = todosFactory.toTodoEntity(todoDTO);
+        todoEntity.setGroupTodos(group);
+
+        todoDTO = todosFactory.toTodoDTO(todoRepository.save(todoEntity));
+
+        return todoDTO;
+    }
+
+    public TodoDTO updateTodoByGroupId(Long groupId, TodoDTO todoDTO) {
+        GroupTodos group = groupTodosRepository.findById(groupId)
+                .orElseThrow(() -> new NotFoundGroupIdException(NOT_FOUND_GROUP_ID));
+
+        todoRepository.findById(todoDTO.getId())
+                .orElseThrow(() -> new NotFoundTodoIdException("No existe un Todo con el id ingresado"));
+
+        Todo todoEntity = todosFactory.toTodoEntity(todoDTO);
+        todoEntity.setGroupTodos(group);
+
         group.getTodos().stream().forEach((t) -> {
-            if(t.getId() == todo.getId()){
-                t.setName(todo.getName());
-                t.setCompleted(todo.isCompleted());
-                t.setId(todo.getId());
+            if(t.getId() == todoEntity.getId()){
+                t.setName(todoEntity.getName());
+                t.setCompleted(todoEntity.isCompleted());
+                t.setId(todoEntity.getId());
             }
         });
-        todo.setGroupTodos(group);
+        todoEntity.setGroupTodos(group);
         groupTodosRepository.save(group);
 
-        return todo;
+        todoDTO = todosFactory.toTodoDTO(todoEntity);
+
+        return todoDTO;
     }
 
     public void deleteTodoById(Long todoId) {

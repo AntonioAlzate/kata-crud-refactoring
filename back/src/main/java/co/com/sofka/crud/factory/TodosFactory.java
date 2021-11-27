@@ -2,10 +2,12 @@ package co.com.sofka.crud.factory;
 
 import co.com.sofka.crud.dtos.TodoDTO;
 import co.com.sofka.crud.entities.Todo;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class TodosFactory {
 
     public TodoDTO toTodoDTO(Todo todo){
