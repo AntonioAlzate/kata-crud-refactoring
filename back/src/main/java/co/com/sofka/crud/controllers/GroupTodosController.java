@@ -1,11 +1,14 @@
 package co.com.sofka.crud.controllers;
 
 import co.com.sofka.crud.businessexceptions.NotFoundTodoIdException;
+import co.com.sofka.crud.dtos.GroupTodosDTO;
 import co.com.sofka.crud.entities.GroupTodos;
 import co.com.sofka.crud.entities.Todo;
 import co.com.sofka.crud.services.GroupTodosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class GroupTodosController {
@@ -16,12 +19,12 @@ public class GroupTodosController {
 
     // Operaciones para Grupos de Todos
     @GetMapping(value = "api/groups")
-    public Iterable<GroupTodos> getAllGroups(){
+    public List<GroupTodosDTO> getAllGroups(){
         return groupTodosService.listGroupsTodos();
     }
 
     @GetMapping(value = "api/group/{groupId}")
-    public GroupTodos getGroupById(@PathVariable("groupId") Long groupId){
+    public GroupTodosDTO getGroupById(@PathVariable("groupId") Long groupId){
         return groupTodosService.getGroupById(groupId);
     }
 

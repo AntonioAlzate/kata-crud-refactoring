@@ -3,14 +3,16 @@ package co.com.sofka.crud.services;
 import co.com.sofka.crud.businessexceptions.EmptyFieldException;
 import co.com.sofka.crud.businessexceptions.NotFoundGroupIdException;
 import co.com.sofka.crud.businessexceptions.NotFoundTodoIdException;
+import co.com.sofka.crud.dtos.GroupTodosDTO;
 import co.com.sofka.crud.entities.GroupTodos;
 import co.com.sofka.crud.entities.Todo;
+import co.com.sofka.crud.factory.GroupTodosFactory;
 import co.com.sofka.crud.repository.GroupTodosRepository;
 import co.com.sofka.crud.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
+import java.util.List;
 
 @Service
 public class GroupTodosService {
@@ -23,13 +25,20 @@ public class GroupTodosService {
     @Autowired
     private TodoRepository todoRepository;
 
-    public Iterable<GroupTodos> listGroupsTodos(){
-        return groupTodosRepository.findAll();
+    @Autowired
+    private GroupTodosFactory groupsFactory;
+
+    public List<GroupTodosDTO> listGroupsTodos(){
+        List<GroupTodos> groups = (List<GroupTodos>) groupTodosRepository.findAll();
+
+        return groupsFactory.toGroupsDTO(groups);
     }
 
-    public GroupTodos getGroupById(Long groupId) {
-        return groupTodosRepository.findById(groupId)
+    public GroupTodosDTO getGroupById(Long groupId) {
+        GroupTodos group = groupTodosRepository.findById(groupId)
                 .orElseThrow(() -> new NotFoundGroupIdException(NOT_FOUND_GROUP_ID));
+
+        return groupsFactory.toGroupDTO(group);
     }
 
     public GroupTodos createNewGroupTodo(GroupTodos groupTodo) {
