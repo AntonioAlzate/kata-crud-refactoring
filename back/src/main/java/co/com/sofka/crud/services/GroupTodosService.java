@@ -31,4 +31,11 @@ public class GroupTodosService {
 
         return groupTodosRepository.save(groupTodo);
     }
+
+    public void deleteGroupById(Long id) {
+        GroupTodos groupTodos = groupTodosRepository.findById(id)
+                .orElseThrow( () -> new NotFoundGroupIdException("El id del grupo no existe"));
+
+        groupTodosRepository.delete(groupTodos);
+    }
 }

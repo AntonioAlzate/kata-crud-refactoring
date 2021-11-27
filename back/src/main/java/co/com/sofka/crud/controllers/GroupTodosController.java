@@ -26,4 +26,8 @@ public class GroupTodosController {
         return groupTodosService.createNewGroupTodo(groupTodo);
     }
 
+    @DeleteMapping(value = "api/grouptodos/{groupId}")
+    public void deleteGroupById(@PathVariable("groupId") Long id){
+        groupTodosService.deleteGroupById(id);
+    }
 }
