@@ -13,8 +13,7 @@ public class Todo {
     private boolean completed;
 
     @ManyToOne
-    @JoinColumn(name = "idGroupTodos")
-    @JsonIgnoreProperties("idGroupTodos")
+    @JoinColumn(name = "idGroupTodos", referencedColumnName = "idGroupTodos")
     private GroupTodos groupTodos;
 
     public Long getId() {
