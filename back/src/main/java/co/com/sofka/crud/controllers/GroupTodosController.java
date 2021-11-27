@@ -49,5 +49,8 @@ public class GroupTodosController {
         throw new NotFoundTodoIdException("El ToDo a actualizar debe contener un id");
     }
 
-
+    @DeleteMapping(value = "api/todo/{todoId}")
+    public void deleteTodoById(@PathVariable("todoId") Long todoId){
+        groupTodosService.deleteTodoById(todoId);
+    }
 }

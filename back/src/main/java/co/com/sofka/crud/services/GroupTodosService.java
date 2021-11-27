@@ -2,6 +2,7 @@ package co.com.sofka.crud.services;
 
 import co.com.sofka.crud.businessexceptions.EmptyFieldException;
 import co.com.sofka.crud.businessexceptions.NotFoundGroupIdException;
+import co.com.sofka.crud.businessexceptions.NotFoundTodoIdException;
 import co.com.sofka.crud.entities.GroupTodos;
 import co.com.sofka.crud.entities.Todo;
 import co.com.sofka.crud.repository.GroupTodosRepository;
@@ -75,5 +76,12 @@ public class GroupTodosService {
         groupTodosRepository.save(group);
 
         return todo;
+    }
+
+    public void deleteTodoById(Long todoId) {
+        Todo todo = todoRepository.findById(todoId)
+                .orElseThrow(() -> new NotFoundTodoIdException("El todo con id especificado no existe"));
+
+        todoRepository.delete(todo);
     }
 }
