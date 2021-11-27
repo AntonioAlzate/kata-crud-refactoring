@@ -59,4 +59,21 @@ public class GroupTodosService {
 
         return todoDb;
     }
+
+    public Todo updateTodoByGroupId(Long groupId, Todo todo) {
+        GroupTodos group = groupTodosRepository.findById(groupId)
+                .orElseThrow(() -> new NotFoundGroupIdException(NOT_FOUND_GROUP_ID));
+
+        group.getTodos().stream().forEach((t) -> {
+            if(t.getId() == todo.getId()){
+                t.setName(todo.getName());
+                t.setCompleted(todo.isCompleted());
+                t.setId(todo.getId());
+            }
+        });
+        todo.setGroupTodos(group);
+        groupTodosRepository.save(group);
+
+        return todo;
+    }
 }
