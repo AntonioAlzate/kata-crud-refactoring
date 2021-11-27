@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -18,7 +19,7 @@ public class GroupTodos {
 
     @OneToMany(mappedBy = "groupTodos")
     @JsonIgnoreProperties("groupTodos")
-    private Set<Todo> todos;
+    private List<Todo> todos;
 
     public long getIdGroupTodos() {
         return idGroupTodos;
@@ -36,11 +37,11 @@ public class GroupTodos {
         this.name = name;
     }
 
-    public Set<Todo> getTodos() {
+    public List<Todo> getTodos() {
         return todos;
     }
 
-    public void setTodos(Set<Todo> todos) {
+    public void setTodos(List<Todo> todos) {
         this.todos = todos;
     }
 }
