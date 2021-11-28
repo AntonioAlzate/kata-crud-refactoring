@@ -1,6 +1,7 @@
 import React, { useRef, useState, useContext } from "react";
 import Store from "../utilities/Store";
 import HOST_API from "./../utilities/Connection";
+import Swal from "sweetalert2";
 
 const FormTodo = (props) => {
   const formRef = useRef(null);
@@ -14,10 +15,19 @@ const FormTodo = (props) => {
   const onAdd = (event) => {
     event.preventDefault();
 
+    if (state.name === "" || state.name === null || state.name === undefined) {
+      Swal.fire({
+        icon: "error",
+        title: "El nombre de una Tarea no puede estar vacio",
+        text: 'Recuerda ingresar un nombre para la tarea antes de dar click en "Crear Tarea"',
+      });
+      return;
+    }
+
     const request = {
       name: state.name,
       id: null,
-      completed: false
+      completed: false,
     };
 
     fetch(HOST_API + "/todo/" + props.idGroup, {
@@ -33,10 +43,27 @@ const FormTodo = (props) => {
         setState({ name: "" });
         formRef.current.reset();
       });
+
+      Swal.fire(
+        '¡Tarea creada exitosamente!',
+        'La tarea ' + state.name + ' se ha creado con exito.',
+        'success'
+      )
   };
 
   const onEdit = (event) => {
     event.preventDefault();
+
+    if (state.name === "" || state.name === null || state.name === undefined) {
+      Swal.fire({
+        icon: "error",
+        title: "El nombre de una Tarea no puede estar vacio",
+        text:
+          "Recuerda ingresar un nombre para la tarea que deseas actualizar " +
+          'antes de dar click en "Actualizar Tarea"',
+      });
+      return;
+    }
 
     const request = {
       name: state.name,
@@ -57,6 +84,12 @@ const FormTodo = (props) => {
         setState({ name: "" });
         formRef.current.reset();
       });
+
+      Swal.fire(
+        '¡Tarea Actualizada exitosamente!',
+        'La tarea ' + state.name + ' se ha Actualizado con exito.',
+        'success'
+      )
   };
 
   return (
@@ -74,12 +107,12 @@ const FormTodo = (props) => {
         ></input>
         {item.id && (
           <button className="btn btn-primary" onClick={onEdit}>
-            Actualizar
+            Actualizar Tarea
           </button>
         )}
         {!item.id && (
           <button className="btn btn-success" onClick={onAdd}>
-            Crear
+            Crear Tarea
           </button>
         )}
       </div>

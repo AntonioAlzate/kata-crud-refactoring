@@ -3,6 +3,7 @@ import Store from "../utilities/Store";
 import HOST_API from "../utilities/Connection";
 import ListTodos from "../Todo/ListTodos";
 import FormTodo from "../Todo/FormTodo";
+import Swal from "sweetalert2";
 
 const ListGroups = () => {
   const {
@@ -20,11 +21,23 @@ const ListGroups = () => {
   }, [dispatch]);
 
   const onDelete = (id) => {
-    fetch(HOST_API + "/grouptodos/" + id, {
-      method: "DELETE",
-    }).then((list) => {
-      dispatch({ type: "delete-group", id });
-    });
+
+    Swal.fire({
+      title: '¿Estas seguro de eliminar el grupo?',
+      showDenyButton: true,
+      confirmButtonText: 'SI',
+      denyButtonText: `NO`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(HOST_API + "/grouptodos/" + id, {
+          method: "DELETE",
+        }).then((list) => {
+          dispatch({ type: "delete-group", id });
+        });
+        Swal.fire('¡Eliminado!', '', 'success')
+      }
+    })
+    
   };
 
   return (
@@ -35,7 +48,7 @@ const ListGroups = () => {
             <fieldset className="border">
               <legend className="w-auto">
                 <b>Grupo: </b> {group.name.toUpperCase()}
-                <button className="btn btn-danger" onClick={() => onDelete(group.idGroupTodos)}>
+                <button className="btn btn-danger m-4" onClick={() => onDelete(group.idGroupTodos)}>
                   Eliminar
                 </button>
               </legend>

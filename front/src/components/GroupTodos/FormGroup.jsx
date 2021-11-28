@@ -1,4 +1,5 @@
 import React, { useRef, useState, useContext } from "react";
+import Swal from "sweetalert2";
 import Store from "../utilities/Store";
 import HOST_API from "./../utilities/Connection";
 
@@ -13,6 +14,15 @@ const FormGroup = () => {
 
   const onAdd = (event) => {
     event.preventDefault();
+
+    if(state.name === "" || state.name === null || state.name === undefined){
+      Swal.fire({
+        icon: 'error',
+        title: 'El nombre de un grupo no puede ser vacío',
+        text: 'Recuerda ingresar un nombre para el grupo de tareas antes de dar click en "Agregar Grupo"',
+      })
+      return;
+    }
 
     const request = {
       name: state.name,
@@ -32,6 +42,12 @@ const FormGroup = () => {
         setState({ name: "" });
         formRef.current.reset();
       }).catch(error => console.log(error.message));
+
+      Swal.fire(
+        '¡Grupo creado exitosamente!',
+        'El grupo ' + state.name + ' se ha creado con exito.',
+        'success'
+      )
   };
 
   return (
@@ -48,7 +64,7 @@ const FormGroup = () => {
           }}
         ></input>
         <button className="btn btn-success" onClick={onAdd}>
-          Agregar
+          Agregar Grupo
         </button>
       </div>
     </form>

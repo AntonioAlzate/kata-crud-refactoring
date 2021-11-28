@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import Store from "../utilities/Store";
 import HOST_API from "../utilities/Connection";
+import Swal from "sweetalert2";
 
 const ListTodos = (props) => {
 
@@ -19,11 +20,22 @@ const ListTodos = (props) => {
   }, [dispatch]);
 
   const onDelete = (id) => {
-    fetch(HOST_API + "/todo/" + id, {
-      method: "DELETE",
-    }).then((list) => {
-      dispatch({ type: "delete-item", id });
-    });
+
+    Swal.fire({
+      title: '¿Estas seguro de querer eliminar la tarea?',
+      showDenyButton: true,
+      confirmButtonText: 'SI',
+      denyButtonText: `NO`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(HOST_API + "/todo/" + id, {
+          method: "DELETE",
+        }).then((list) => {
+          dispatch({ type: "delete-item", id });
+        });
+        Swal.fire('¡Eliminada!', '', 'success')
+      }
+    })
   };
 
   const onEdit = (todo) => {
