@@ -2,7 +2,7 @@ import React, { useRef, useState, useContext } from "react";
 import Store from "../utilities/Store";
 import HOST_API from "./../utilities/Connection";
 
-const FormTodo = () => {
+const FormTodo = (props) => {
   const formRef = useRef(null);
   const {
     dispatch,
@@ -17,10 +17,10 @@ const FormTodo = () => {
     const request = {
       name: state.name,
       id: null,
-      completed: false,
+      completed: false
     };
 
-    fetch(HOST_API + "/todo", {
+    fetch(HOST_API + "/todo/" + props.idGroup, {
       method: "POST",
       body: JSON.stringify(request),
       headers: {
@@ -44,7 +44,7 @@ const FormTodo = () => {
       isCompleted: item.isCompleted,
     };
 
-    fetch(HOST_API + "/todo", {
+    fetch(HOST_API + "/todo/" + props.idGroup, {
       method: "PUT",
       body: JSON.stringify(request),
       headers: {
@@ -61,17 +61,28 @@ const FormTodo = () => {
 
   return (
     <form ref={formRef}>
-      <input
-        type="text"
-        name="name"
-        placeholder="¿Qué piensas hacer hoy?"
-        defaultValue={item.name}
-        onChange={(event) => {
-          setState({ ...state, name: event.target.value });
-        }}
-      ></input>
-      {item.id && <button onClick={onEdit}>Actualizar</button>}
-      {!item.id && <button onClick={onAdd}>Crear</button>}
+      <div className="container input-group mt-3">
+        <input
+          type="text"
+          name="name"
+          className="form-control"
+          placeholder="¿Qué piensas hacer hoy?"
+          defaultValue={item.name}
+          onChange={(event) => {
+            setState({ ...state, name: event.target.value });
+          }}
+        ></input>
+        {item.id && (
+          <button className="btn btn-primary" onClick={onEdit}>
+            Actualizar
+          </button>
+        )}
+        {!item.id && (
+          <button className="btn btn-success" onClick={onAdd}>
+            Crear
+          </button>
+        )}
+      </div>
     </form>
   );
 };

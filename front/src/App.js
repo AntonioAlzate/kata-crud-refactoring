@@ -1,13 +1,15 @@
 import React from "react";
-import FormTodo from './components/Todo/FormTodo';
-import ListTodos from './components/Todo/ListTodos';
 import { StoreProvider } from './components/utilities/Store';
+import FormGroup from './components/GroupTodos/FormGroup';
+import ListGroups from './components/GroupTodos/ListGroups';
 
 function App() {
   return <StoreProvider>
-    <h3>To-Do List</h3>
-    <FormTodo />
-    <ListTodos />
+    <div className="container">
+      <h3>To-Do Grupos de Tareas</h3>
+      <FormGroup />
+      <ListGroups />
+    </div>
   </StoreProvider>
 }
 

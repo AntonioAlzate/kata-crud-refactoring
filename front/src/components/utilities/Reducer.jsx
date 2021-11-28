@@ -1,5 +1,25 @@
 function Reducer(state, action) {
   switch (action.type) {
+    // Groups
+    case "add-group":
+      const groupUp = state.group.list;
+      groupUp.push(action.item);
+      return { ...state, group: { list: groupUp, item: {} } };
+
+    case "delete-group":
+      const groupUpDelete = state.group;
+      const listGroupUpdate = groupUpDelete.list.filter((item) => {
+        return item.idGroupTodos !== action.id;
+      });
+      groupUpDelete.list = listGroupUpdate;
+      return { ...state, group: groupUpDelete };
+
+      case "update-list-group":
+        const todoGroupUpList = state.group;
+        todoGroupUpList.list = action.list;
+        return { ...state, group: todoGroupUpList };
+
+    // Todo
     case "update-item":
       const todoUpItem = state.todo;
       const listUpdateEdit = todoUpItem.list.map((item) => {

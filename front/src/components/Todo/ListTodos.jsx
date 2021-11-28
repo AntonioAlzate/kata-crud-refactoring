@@ -2,10 +2,13 @@ import React, { useContext, useEffect } from "react";
 import Store from "../utilities/Store";
 import HOST_API from "../utilities/Connection";
 
-const ListTodos = () => {
+const ListTodos = (props) => {
 
   const { dispatch, state: { todo } } = useContext(Store);
-  const currentList = todo.list;
+  const currentList = todo.list.filter(todo => {
+    return todo.groupTodoId === props.idGroup;
+  })
+  
 
   useEffect(() => {
     fetch(HOST_API + "/todos")
@@ -16,7 +19,7 @@ const ListTodos = () => {
   }, [dispatch]);
 
   const onDelete = (id) => {
-    fetch(HOST_API + "/" + id + "/todo", {
+    fetch(HOST_API + "/todo/" + id, {
       method: "DELETE",
     }).then((list) => {
       dispatch({ type: "delete-item", id });
@@ -33,7 +36,7 @@ const ListTodos = () => {
       id: todo.id,
       completed: event.target.checked,
     };
-    fetch(HOST_API + "/todo", {
+    fetch(HOST_API + "/todo/" + props.idGroup, {
       method: "PUT",
       body: JSON.stringify(request),
       headers: {
@@ -50,13 +53,13 @@ const ListTodos = () => {
     textDecoration: "line-through",
   };
   return (
-    <div>
+    <div className="container p-3">
       <table>
         <thead>
           <tr>
-            <td>ID</td>
-            <td>Tarea</td>
-            <td>¿Completado?</td>
+            <th>ID</th>
+            <th>Tarea</th>
+            <th>¿Completado?</th>
           </tr>
         </thead>
         <tbody>
@@ -73,10 +76,10 @@ const ListTodos = () => {
                   ></input>
                 </td>
                 <td>
-                  <button onClick={() => onDelete(todo.id)}>Eliminar</button>
+                  <button className="btn btn-danger" onClick={() => onDelete(todo.id)}>Eliminar</button>
                 </td>
                 <td>
-                  <button onClick={() => onEdit(todo)}>Editar</button>
+                  <button className="btn btn-primary" onClick={() => onEdit(todo)}>Editar</button>
                 </td>
               </tr>
             );

@@ -4,7 +4,7 @@ import Reducer from './Reducer';
 
 const initialState = {
     todo: { list: [], item: {} },
-    group: { listGroup: [], itemGroup: {}}
+    group: { list: [], item: {}}
   };
 
 const Store = createContext(initialState);
