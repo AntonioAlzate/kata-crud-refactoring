@@ -1,6 +1,8 @@
 package co.com.sofka.crud.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,6 +20,7 @@ public class GroupTodos {
     private String name;
 
     @OneToMany(mappedBy = "groupTodos")
+    @Cascade(CascadeType.DELETE)
     @JsonIgnoreProperties("groupTodos")
     private List<Todo> todos;
 

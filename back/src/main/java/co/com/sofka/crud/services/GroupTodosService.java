@@ -51,7 +51,7 @@ public class GroupTodosService {
 
     public GroupTodosDTO createNewGroupTodo(GroupTodosDTO groupDTO) {
         // Se realiza la validación para que el nombre no este vacío
-        if(groupDTO.getName().trim().isEmpty()){
+        if(groupDTO.getName() == null || groupDTO.getName().trim().isEmpty()){
             throw new EmptyFieldException("El campo nombre no puede estar vacío");
         }
 
@@ -69,7 +69,7 @@ public class GroupTodosService {
         GroupTodos groupTodos = groupTodosRepository.findById(id)
                 .orElseThrow( () -> new NotFoundGroupIdException(NOT_FOUND_GROUP_ID));
 
-        groupTodosRepository.delete(groupTodos);
+        groupTodosRepository.deleteById(id);
     }
 
     public TodoDTO createNewTodoByGroupId(Long groupId, TodoDTO todoDTO) {

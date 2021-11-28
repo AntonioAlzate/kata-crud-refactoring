@@ -16,7 +16,9 @@ public class TodosFactory {
         todoDTO.setId(todo.getId());
         todoDTO.setCompleted(todo.isCompleted());
         todoDTO.setName(todo.getName());
-        todoDTO.setGroupTodoId(todo.getGroupTodos().getIdGroupTodos());
+
+        if(todo.getGroupTodos() != null)
+            todoDTO.setGroupTodoId(todo.getGroupTodos().getIdGroupTodos());
 
         return todoDTO;
     }
